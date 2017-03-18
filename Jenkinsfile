@@ -1,3 +1,3 @@
 node('jenkins') {
-  
+  checkout scm
 }
