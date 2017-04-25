@@ -18,3 +18,9 @@
     - server_tokens off
     - types_hash_max_size 2048
     - client_max_body_size "3M"
+- src: ssh://git@github.com/USF-IT/cims-ansible-role-certtool.git
+  version: master
+  scm: git
+  name: certtool
+  tags:
+    - deploy  

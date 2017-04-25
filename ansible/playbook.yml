@@ -2,4 +2,5 @@
 - hosts: "{{ target_hosts }}"
   roles:
     - { role: 'repo_epel', tags: ['deploy'] }
+    - { role: 'certtool', tags: ['deploy'] }
     - { role: 'nginx', tags: ['deploy'] }
