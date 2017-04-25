@@ -11,7 +11,7 @@
   with_items:
     - /etc/nginx/sites-enabled
     - /etc/nginx/shared
-- name: create nginx config for cims-hrid
+- name: create nginx config
   template:
     src: "{{ playbook_dir }}/templates/nginx/host.conf.j2"
     dest: "/etc/nginx/sites-available/{{  inventory_hostname_short }}.conf"
