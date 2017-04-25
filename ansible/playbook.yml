@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: "{{ target_hosts }}"
   roles:
-    - repo_epel
-    - nginx
+    - { role: 'repo_epel', tags: ['deploy'] }
+    - { role: 'nginx', tags: ['deploy'] }

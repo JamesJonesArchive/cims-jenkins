@@ -1,32 +1,19 @@
-node('jenkins') {
-  checkout scm
-  
-  stage('Install Ansible') {
-    def distVer = sh script: 'python -c "import platform;print(platform.linux_distribution()[1])"', returnStdout: true
-    def missingEpel = sh script: 'rpm -q --quiet epel-release', returnStatus: true
-    def missingAnsible = sh script: 'rpm -q --quiet ansible', returnStatus: true
-    if (missingEpel) {
-      echo "Epel to be installed"
-      if(distVer.toFloat().trunc() == 7) {
-        echo "Detected version 7"
-        sh "rpm -iUvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm || exit 0"
-      }
-      if(distVer.toFloat().trunc() == 6) {
-        echo "Detected version 6"
-        sh "rpm -iUvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm || exit 0"
-      }
-      if(distVer.toFloat().trunc() == 5) {
-        echo "Detected version 5"
-        sh "rpm -iUvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-5.noarch.rpm || exit 0"
-      }
-      sh "yum -y update || exit 0"
-    } else {
-      echo "Already installed"
-    }
-    if(missingAnsible) {
-      sh "yum -y install ansible || exit 0"
-    }
-    // sh 'yum -y install rpms/ansible-vault-usf*.rpm || exit 0'
-    unstash 'ansible'
+node('master') {
+  stage('Get Ansible Roles') {
+    sh('#!/bin/sh -e\n' + 'ansible-galaxy install -r ansible/requirements.yml -p ansible/roles/ -f')
   }
+  stage('Get inventory') {
+    dir('ansible/inventory') {
+      git url: 'git@github.com:USF-IT/cims-ansible-inventory.git', branch: 'master'
+    }
+    dir('ansible/common') {
+      git url: 'git@github.com:USF-IT/idm-ansible-common.git', branch: 'master'
+    }
+  }
+  stage('Build cims-hrid') {
+    sshagent (credentials: ['jenkins']) {
+      sh('#!/bin/sh -e\n' + "ansible-playbook -i ansible/inventory/${env.DEPLOY_ENV.toLowerCase()}/hosts --user=jenkins --vault-password-file=${env.USF_ANSIBLE_VAULT_KEY} ansible/playbook.yml --extra-vars 'target_hosts=jenkins deploy_env=${env.DEPLOY_ENV}' -b -t deploy")
+    }
+  }
+
 }
