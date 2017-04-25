@@ -1,4 +1,5 @@
 node('master') {
+  checkout scm
   stage('Get Ansible Roles') {
     sh('#!/bin/sh -e\n' + 'ansible-galaxy install -r ansible/requirements.yml -p ansible/roles/ -f')
   }
