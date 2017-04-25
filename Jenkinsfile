@@ -11,7 +11,7 @@ node('master') {
       git url: 'git@github.com:USF-IT/idm-ansible-common.git', branch: 'master'
     }
   }
-  stage('Build cims-hrid') {
+  stage('Build jenkins') {
     sshagent (credentials: ['jenkins']) {
       sh('#!/bin/sh -e\n' + "ansible-playbook -i ansible/inventory/${env.DEPLOY_ENV.toLowerCase()}/hosts --user=jenkins --vault-password-file=${env.USF_ANSIBLE_VAULT_KEY} ansible/playbook.yml --extra-vars 'target_hosts=jenkins deploy_env=${env.DEPLOY_ENV}' -b -t deploy")
     }
