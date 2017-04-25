@@ -3,6 +3,7 @@
   roles:
     - { role: 'repo_epel', tags: ['deploy'] }
     - { role: 'certtool', tags: ['deploy'] }
+    - { role: 'g_ansible', tags: ['deploy'] }
     - { role: 'nginx', tags: ['deploy'] }
   tasks:
     - name: Setup nginx host

@@ -24,3 +24,8 @@
   name: certtool
   tags:
     - deploy  
+- src: geerlingguy.ansible
+  version: 1.2.0
+  name: g_ansible
+  tags:
+    - deploy
