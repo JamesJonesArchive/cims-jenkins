@@ -4,3 +4,33 @@
     - { role: 'repo_epel', tags: ['deploy'] }
     - { role: 'certtool', tags: ['deploy'] }
     - { role: 'nginx', tags: ['deploy'] }
+  tasks:
+    - name: Setup nginx host
+      include: nginx.yml
+      tags:
+        - deploy
+    - name: create nginx config for cims-hrid
+      template:
+        src: "{{ playbook_dir }}/templates/nginx/shared/jenkins.conf.j2"
+        dest: "/etc/nginx/shared/jenkins.conf"
+        mode: 0644
+        backup: no
+      tags:
+        - deploy
+    - name: Purge legacy nginx config
+      file:
+        path: /etc/nginx/sites-enabled/jenkins.conf
+        state: absent
+      tags:
+        - deploy        
+    - name: Enable and start nginx
+      service:
+        name: "{{ item}}"
+        enabled: yes
+        state: restarted
+      with_items:
+        - nginx
+      tags: 
+        - deploy 
+        - pr
+        
