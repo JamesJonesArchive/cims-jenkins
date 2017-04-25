@@ -29,3 +29,8 @@
   name: g_ansible
   tags:
     - deploy
+- src: geerlingguy.jenkins
+  version: 2.7.3
+  name: g_jenkins
+  tags:
+    - deploy

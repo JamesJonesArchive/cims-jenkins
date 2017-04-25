@@ -1,9 +1,12 @@
 ---
 - hosts: "{{ target_hosts }}"
+  vars:
+    jenkins_hostname: "{{ ansible_fqdn }}"
   roles:
     - { role: 'repo_epel', tags: ['deploy'] }
     - { role: 'certtool', tags: ['deploy'] }
     - { role: 'g_ansible', tags: ['deploy'] }
+    - { role: 'g_jenkins', tags: ['deploy'] }
     - { role: 'nginx', tags: ['deploy'] }
   tasks:
     - name: Setup nginx host
