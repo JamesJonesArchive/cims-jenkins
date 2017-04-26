@@ -1,0 +1,3 @@
+---
+jenkins_hostname: {{ ansible_fqdn }}
+jenkins_plugins: []

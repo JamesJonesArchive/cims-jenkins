@@ -1,7 +1,7 @@
 ---
 - hosts: "{{ target_hosts }}"
-  vars:
-    jenkins_hostname: "{{ ansible_fqdn }}"
+  var_files:
+    - ./vars/main.yml
   roles:
     - { role: 'repo_epel', tags: ['deploy'] }
     - { role: 'certtool', tags: ['deploy'] }
