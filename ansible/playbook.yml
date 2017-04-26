@@ -2,6 +2,17 @@
 - hosts: "{{ target_hosts }}"
   vars_files:
     - ./vars/main.yml
+  pre_tasks:
+    - name: create nginx log dir
+      file: 
+        path: "{{ item }}"
+        state: directory
+        mode: 0755
+      with_items:
+        - /var/log/nginx
+        - /var/log/nginx/jenkins
+      tags:
+        - deploy
   roles:
     - { role: 'repo_epel', tags: ['deploy'] }
     - { role: 'certtool', tags: ['deploy'] }
@@ -25,15 +36,6 @@
       file:
         path: /etc/nginx/sites-enabled/jenkins.conf
         state: absent
-      tags:
-        - deploy
-    - name: create nginx log dir
-      file: 
-        path: "{{ item }}"
-        state: directory
-        mode: 0755
-      with_items:
-        - /var/log/nginx/jenkins
       tags:
         - deploy
     - name: Enable and start nginx
