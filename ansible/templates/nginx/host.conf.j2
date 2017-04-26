@@ -26,5 +26,12 @@ server {
     add_header X-Frame-Options DENY;
     add_header X-Content-Type-Options nosniff;
     
+    #this is the jenkins web root directory (mentioned in the /etc/default/jenkins file)
+    root            /var/run/jenkins/war/;
+  
+    access_log      /var/log/nginx/jenkins/access.log;
+    error_log       /var/log/nginx/jenkins/error.log;
+    ignore_invalid_headers off; #pass through headers from Jenkins which are considered invalid by Nginx server.
+  
     include /etc/nginx/shared/*.conf;
 }
