@@ -26,7 +26,14 @@
         path: /etc/nginx/sites-enabled/jenkins.conf
         state: absent
       tags:
-        - deploy        
+        - deploy
+    - name: create nginx log dir
+      file: 
+        path: "{{ item }}"
+        state: directory
+        mode: 0755
+      with_items:
+        - /var/log/nginx/jenkins
     - name: Enable and start nginx
       service:
         name: "{{ item}}"
